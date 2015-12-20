@@ -21,6 +21,7 @@ import converter.StringConverter;
  * @author Ivan
  */
 public class DAOAnnotationUtils {
+	
 	static FileInputStream stream;
 	
 	/**
@@ -28,6 +29,7 @@ public class DAOAnnotationUtils {
 	 * @param c Поле
 	 * @return Имя класса
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static String getStorageName(Class c){
 		Stored t = (Stored) c.getAnnotation(Stored.class);
 		return (t!=null) ? t.name() : null;
@@ -38,6 +40,7 @@ public class DAOAnnotationUtils {
 	 * @param c Класс из модели
 	 * @return Коллекция полей
 	 */
+	@SuppressWarnings("rawtypes")
 	public static HashMap<String, Field> getStoredFields(Class c){
 		HashMap<String, Field> res = new HashMap<String,Field>();
 		Field[] fields = c.getDeclaredFields();
@@ -56,24 +59,23 @@ public class DAOAnnotationUtils {
 	 * @param f Поле 
 	 * @return Значение поля (Строка)
 	 */
+	@SuppressWarnings("rawtypes")
 	public static <T> String getStringValue(T instance, Field f){
 		try {
 			PropertyDescriptor p = new PropertyDescriptor(f.getName(), instance.getClass());
 			Class fieldClass = p.getPropertyType();
 			if (fieldClass.getCanonicalName().equals("int")){
-				return ((Integer) p.getReadMethod().invoke(instance,null)).toString();
+				return ((Integer) p.getReadMethod().invoke(instance)).toString();
 			}
 			if (fieldClass.getCanonicalName().equals("double")){
-				return ((Double) p.getReadMethod().invoke(instance,null)).toString();
+				return ((Double) p.getReadMethod().invoke(instance)).toString();
 			}
-			Object value = p.getReadMethod().invoke(instance,null);
+			Object value = p.getReadMethod().invoke(instance);
 			
 			if(value==null) return "null";
 			
 			if (fieldClass.equals(String.class) || fieldClass.equals(UUID.class)) return "\""+value.toString()+"\"";
-			
-			String prefix = ""; // (isReference(f)) ? "^"+f.getType().getCanonicalName()+" : " : "";
-			return	(value!=null) ? prefix+value.toString() : prefix+"NULL";
+			return	(value!=null) ? value.toString() : "NULL";
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -92,11 +94,12 @@ public class DAOAnnotationUtils {
 	 * @param f Поле
 	 * @return Значение
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> T getFieldValue(T instance, Field f){
 			PropertyDescriptor p;
 			try {
 				p = new PropertyDescriptor(f.getName(), instance.getClass());
-				return ((T) p.getReadMethod().invoke(instance,null));
+				return ((T) p.getReadMethod().invoke(instance));
 			} catch (IntrospectionException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
@@ -115,6 +118,7 @@ public class DAOAnnotationUtils {
 	 * @param field Поле
 	 * @return Класс конвертера
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static <T extends Converter> T getValueConverter(Field field){
 		Stored s = (Stored) field.getAnnotation(Stored.class);
 		Class converterClass = s.converter();
@@ -122,10 +126,8 @@ public class DAOAnnotationUtils {
 			Converter res = (Converter) converterClass.newInstance();
 			return (T) res;
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -137,6 +139,7 @@ public class DAOAnnotationUtils {
 	 * @param entityClass Класс модели, в который будет сохранен результат
 	 * @return Обьект модели
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T> T fromResultSet(ResultSet rs,Class entityClass){
 		try{
 			T instance = (T)entityClass.newInstance();

@@ -7,15 +7,18 @@ import converter.StringConverter;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Stored {
+	
 	/**
 	 * Имя аннотированного поля
 	 * @return
 	 */
 	public String name() default "";
+	
 	/**
 	 * Тип конвертера аннотированного поля
 	 * @return Конвертер
 	 */
-	public Class  converter() default StringConverter.class;
+	@SuppressWarnings("rawtypes")
+	public Class converter() default StringConverter.class;
 	
 }

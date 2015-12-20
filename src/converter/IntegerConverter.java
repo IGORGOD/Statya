@@ -5,16 +5,16 @@ package converter;
  */
 public class IntegerConverter implements Converter {
 
+	@SuppressWarnings("hiding")
 	@Override
 	public <Integer> String toString(Integer value) {
 		return ""+value;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T toValue(String str) {
-		int x=Integer.parseInt(str);
 		return (T)new Integer(Integer.parseInt(str));
-		
 	}
 
 }

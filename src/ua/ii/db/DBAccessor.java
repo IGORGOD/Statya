@@ -188,7 +188,6 @@ public class DBAccessor implements DBCRUDSInterface{
 		try{
 			StringBuilder sql=new StringBuilder();
 			sql.append("SELECT ");
-			Field[] fields = entityClass.getDeclaredFields();
 			sql.append(" * FROM ");
 			sql.append(DAOAnnotationUtils.getStorageName(entityClass));
 			sql.append(" WHERE id");

@@ -40,7 +40,7 @@ public interface DBCRUDSInterface {
 	 * @param entityClass Тип обьекта
 	 * @return Коллекция обьектов Т
 	 */
-	public <T> List<T> select(DAOFilter filter, Class<T> entityClass);
+	public <T> List<T> select(Class<T> entityClass);
 
 	/**
 	 * Метод выбора с базы данных всех обьектов типа Т

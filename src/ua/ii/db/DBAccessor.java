@@ -1,6 +1,5 @@
 package ua.ii.db;
 
-import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -137,15 +136,88 @@ public class DBAccessor implements DBCRUDSInterface{
 	}
 
 	@Override
-	public <T> List<T> select(DAOFilter filter, Class<T> entityClass) {
-		// TODO Auto-generated method stub
-		return null;
+	public <T> List<T> select(Class<T> entityClass) {
+		try{
+	    	ArrayList<T> result=new ArrayList<T>();
+	    	Field[] fields = entityClass.newInstance().getClass().getDeclaredFields();
+	    	StringBuilder str=new StringBuilder("SELECT ");
+	    	for(Field field:fields){
+				str.append(field.getAnnotation(Stored.class).name()+", ");	
+			}
+	    	str=new StringBuilder(str.substring(0, str.length()-2));
+	    	str.append(" FROM ");
+	    	str.append(DAOAnnotationUtils.getStorageName(entityClass));
+	    	resultSet = statement.executeQuery(str.toString());
+	    	while(resultSet.next()){
+	    		T instance=DAOAnnotationUtils.fromResultSet(resultSet, entityClass);
+	    		result.add(instance);
+	    	}
+	    	return result;
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	    	return null;
+	    }
 	}
 
 	@Override
 	public <T> List<T> readAll(Class<T> entityClass) {
-		// TODO Auto-generated method stub
-		return null;
+		try{
+			ArrayList<T> result=new ArrayList<T>();
+			Field[] fields = entityClass.newInstance().getClass().getDeclaredFields();
+			StringBuilder str=new StringBuilder("SELECT ");
+			for(Field field:fields){
+				str.append(field.getAnnotation(Stored.class).name()+", ");	
+			}
+			str=new StringBuilder(str.substring(0, str.length()-2));
+			str.append(" FROM ");
+			str.append(DAOAnnotationUtils.getStorageName(entityClass));
+			System.out.println(str);
+			resultSet = statement.executeQuery(str.toString());
+			while(resultSet.next()){
+				T instance=DAOAnnotationUtils.fromResultSet(resultSet, entityClass);
+				result.add(instance);
+			}
+			return result;	
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
+	public <T> 	T read(Class<T> entityClass, int id){
+		try{
+			StringBuilder sql=new StringBuilder();
+			sql.append("SELECT ");
+			Field[] fields = entityClass.getDeclaredFields();
+			sql.append(" * FROM ");
+			sql.append(DAOAnnotationUtils.getStorageName(entityClass));
+			sql.append(" WHERE id");
+			sql.append(entityClass.getSimpleName());
+			sql.append(" = ");
+			sql.append(id);
+			System.out.println(sql);
+			ResultSet rs = statement.executeQuery(sql.toString());
+			rs.last();
+			return DAOAnnotationUtils.fromResultSet(rs, entityClass);
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public <T> 	T read(Class<T> entityClass, String text){
+		try{
+			StringBuilder sql=new StringBuilder();
+			sql.append("SELECT * FROM");
+			sql.append(DAOAnnotationUtils.getStorageName(entityClass));
+			sql.append(" WHERE text = ");
+			sql.append(entityClass.getDeclaredField("Text"));
+			System.out.println(sql);
+			ResultSet rs = statement.executeQuery(sql.toString());
+			return DAOAnnotationUtils.fromResultSet(rs, entityClass);
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

@@ -1,0 +1,8 @@
+<config>
+  <bd>
+    <user>root</user>
+    <password>iloveballduck</password>
+    <url>jdbc:mysql://localhost:3306/auto</url>
+    <driver>com.mysql.jdbc.Driver</driver>
+  </bd>
+</config>

@@ -8,7 +8,7 @@ public class IntegerConverter implements Converter {
 	@SuppressWarnings("hiding")
 	@Override
 	public <Integer> String toString(Integer value) {
-		return ""+value;
+		return String.valueOf(value);
 	}
 
 	@SuppressWarnings("unchecked")

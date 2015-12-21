@@ -1,19 +1,16 @@
 package converter;
-/**
- * Конвертер строки
- * @author Admin
- *
- */
-public class StringConverter implements Converter{
+
+public class DoubleConverter implements Converter {
 
 	@Override
 	public <T> String toString(T value) {
 		return (String)value;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T toValue(String str) {
-		return null;
+		return (T)new Double(Double.parseDouble(str));
 	}
 
 }

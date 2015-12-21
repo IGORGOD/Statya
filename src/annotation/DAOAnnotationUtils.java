@@ -12,7 +12,6 @@ import java.util.UUID;
 
 import annotation.Stored;
 import converter.Converter;
-import converter.DateConverter;
 import converter.IntegerConverter;
 import converter.StringConverter;
 
@@ -149,10 +148,6 @@ public class DAOAnnotationUtils {
 				if(field.getAnnotation(Stored.class).converter().equals(IntegerConverter.class)){
 					int i=rs.getInt(field.getAnnotation(Stored.class).name());
 					p.getWriteMethod().invoke(instance, i);		
-				}
-				if(field.getAnnotation(Stored.class).converter().equals(DateConverter.class)){	
-					Date i=rs.getDate(field.getAnnotation(Stored.class).name());
-					p.getWriteMethod().invoke(instance, i);
 				}
 				if(field.getAnnotation(Stored.class).converter().equals(StringConverter.class)){
 					String i=rs.getString(field.getAnnotation(Stored.class).name());

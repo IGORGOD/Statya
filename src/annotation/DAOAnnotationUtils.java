@@ -5,12 +5,12 @@ import java.beans.PropertyDescriptor;
 import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.UUID;
 
 import annotation.Stored;
+import converter.ByteConverter;
 import converter.Converter;
 import converter.IntegerConverter;
 import converter.StringConverter;
@@ -65,6 +65,9 @@ public class DAOAnnotationUtils {
 			Class fieldClass = p.getPropertyType();
 			if (fieldClass.getCanonicalName().equals("int")){
 				return ((Integer) p.getReadMethod().invoke(instance)).toString();
+			}
+			if (fieldClass.getCanonicalName().equals("byte")){
+				return ((Byte) p.getReadMethod().invoke(instance)).toString();
 			}
 			if (fieldClass.getCanonicalName().equals("double")){
 				return ((Double) p.getReadMethod().invoke(instance)).toString();
@@ -146,11 +149,15 @@ public class DAOAnnotationUtils {
 			for(Field field:fields){
 				PropertyDescriptor p = new PropertyDescriptor(field.getName(), entityClass);
 				if(field.getAnnotation(Stored.class).converter().equals(IntegerConverter.class)){
-					int i=rs.getInt(field.getAnnotation(Stored.class).name());
+					int i = rs.getInt(field.getAnnotation(Stored.class).name());
+					p.getWriteMethod().invoke(instance, i);		
+				}
+				if(field.getAnnotation(Stored.class).converter().equals(ByteConverter.class)){
+					byte i = rs.getByte(field.getAnnotation(Stored.class).name());
 					p.getWriteMethod().invoke(instance, i);		
 				}
 				if(field.getAnnotation(Stored.class).converter().equals(StringConverter.class)){
-					String i=rs.getString(field.getAnnotation(Stored.class).name());
+					String i = rs.getString(field.getAnnotation(Stored.class).name());
 					p.getWriteMethod().invoke(instance, i);
 				}
 			}

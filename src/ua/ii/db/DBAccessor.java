@@ -19,22 +19,22 @@ import com.mysql.jdbc.Statement;
 public class DBAccessor implements DBCRUDSInterface{
 	
 	/**
-	 * Обьект для выполнения sql-запросов
+	 * РћР±СЊРµРєС‚ РґР»СЏ РІС‹РїРѕР»РЅРµРЅРёСЏ sql-Р·Р°РїСЂРѕСЃРѕРІ
 	 */
 	private  Statement statement;
 	
 	/**
-	 * Возвращенный базой результат выполнения запроса
+	 * Р’РѕР·РІСЂР°С‰РµРЅРЅС‹Р№ Р±Р°Р·РѕР№ СЂРµР·СѓР»СЊС‚Р°С‚ РІС‹РїРѕР»РЅРµРЅРёСЏ Р·Р°РїСЂРѕСЃР°
 	 */
 	private  ResultSet resultSet;
 	
 	/**
-	 * Соединение с БД
+	 * РЎРѕРµРґРёРЅРµРЅРёРµ СЃ Р‘Р”
 	 */
 	private  Connection connection;
 	
 	/**
-	 * Конфигурация соединения
+	 * РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ СЃРѕРµРґРёРЅРµРЅРёСЏ
 	 */
 	private  Configuration config;
 	
@@ -44,7 +44,7 @@ public class DBAccessor implements DBCRUDSInterface{
         {
 			config = new ConfigLoader().loadXMLConfig(new File("src/BD.xml"));
             Class.forName("com.mysql.jdbc.Driver");
-            connection= DriverManager.getConnection(config.getProperty("config.bd.url"),
+            connection = DriverManager.getConnection(config.getProperty("config.bd.url"),
                     config.getProperty("config.bd.user"), config.getProperty("config.bd.password"));
                     statement = (Statement) connection.createStatement();
         } catch (ClassNotFoundException ex)
@@ -69,22 +69,21 @@ public class DBAccessor implements DBCRUDSInterface{
 	@Override
 	public <T> void insert(T instance) {
 		try {
-			StringBuilder str=new StringBuilder("INSERT INTO ");
-			StringBuilder str1=new StringBuilder("(");
+			StringBuilder str = new StringBuilder("INSERT INTO ");
+			StringBuilder str1 = new StringBuilder("(");
 			str.append(DAOAnnotationUtils.getStorageName(instance.getClass()));
 			Field[] fields = instance.getClass().getDeclaredFields();
 			str.append("(");
-			for(Field field:fields){
+			for(Field field : fields){
 				if(!field.getAnnotation(Stored.class).name().equals("id")){
 					str.append(field.getAnnotation(Stored.class).name()+", ");	
-					str1.append("\"" +DAOAnnotationUtils.getFieldValue(instance,field) +"\"");
-					str1.append(", ");
+					str1.append("\"" +DAOAnnotationUtils.getFieldValue(instance,field) +"\", ");
 				}
 				
 			}
-			str1=new StringBuilder(str1.substring(0, str1.length()-2));
+			str1 = new StringBuilder(str1.substring(0, str1.length()-2));
 			str1.append(")");
-			str=new StringBuilder(str.substring(0, str.length()-2));
+			str = new StringBuilder(str.substring(0, str.length()-2));
 			str.append(") VALUES");
 			str.append(str1);
 			System.out.println(str);
@@ -98,15 +97,14 @@ public class DBAccessor implements DBCRUDSInterface{
 	public <T> void update(T instance) {
 		try{
 			Field[] fields = instance.getClass().getDeclaredFields();
-			StringBuilder sql=new StringBuilder();
+			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE ");
-			sql.append(DAOAnnotationUtils.getStorageName(instance.getClass())+" "+"SET ");
-			for(Field field:fields){
-				sql.append(field.getAnnotation(Stored.class).name()+"=");
-				sql.append("\"" +DAOAnnotationUtils.getFieldValue(instance,field) +"\"");
-				sql.append(", ");
+			sql.append(DAOAnnotationUtils.getStorageName(instance.getClass()) +" SET ");
+			for(Field field : fields){
+				sql.append(field.getAnnotation(Stored.class).name());
+				sql.append("=\"" +DAOAnnotationUtils.getFieldValue(instance,field) +"\", ");
 			}
-			sql=new StringBuilder(sql.substring(0, sql.length()-2));
+			sql = new StringBuilder(sql.substring(0, sql.length()-2));
 			sql.append(" WHERE id");
 			sql.append(DAOAnnotationUtils.getStorageName(instance.getClass()));
 			sql.append("=");
@@ -122,10 +120,10 @@ public class DBAccessor implements DBCRUDSInterface{
 	public <T> List<T> select(String SQLString, Class<T> entityClass) {
 		try{
 			resultSet = statement.executeQuery(SQLString);
-			ArrayList<T> result=new ArrayList<T>();
+			ArrayList<T> result = new ArrayList<T>();
 
 			while(resultSet.next()){  
-				T instance=DAOAnnotationUtils.fromResultSet(resultSet, entityClass);
+				T instance = DAOAnnotationUtils.fromResultSet(resultSet, entityClass);
 				result.add(instance);   
 			}
 			return result;
@@ -138,18 +136,18 @@ public class DBAccessor implements DBCRUDSInterface{
 	@Override
 	public <T> List<T> select(Class<T> entityClass) {
 		try{
-	    	ArrayList<T> result=new ArrayList<T>();
+	    	ArrayList<T> result = new ArrayList<T>();
 	    	Field[] fields = entityClass.newInstance().getClass().getDeclaredFields();
 	    	StringBuilder str=new StringBuilder("SELECT ");
 	    	for(Field field:fields){
 				str.append(field.getAnnotation(Stored.class).name()+", ");	
 			}
-	    	str=new StringBuilder(str.substring(0, str.length()-2));
+	    	str = new StringBuilder(str.substring(0, str.length()-2));
 	    	str.append(" FROM ");
 	    	str.append(DAOAnnotationUtils.getStorageName(entityClass));
 	    	resultSet = statement.executeQuery(str.toString());
 	    	while(resultSet.next()){
-	    		T instance=DAOAnnotationUtils.fromResultSet(resultSet, entityClass);
+	    		T instance = DAOAnnotationUtils.fromResultSet(resultSet, entityClass);
 	    		result.add(instance);
 	    	}
 	    	return result;
@@ -162,9 +160,9 @@ public class DBAccessor implements DBCRUDSInterface{
 	@Override
 	public <T> List<T> readAll(Class<T> entityClass) {
 		try{
-			ArrayList<T> result=new ArrayList<T>();
+			ArrayList<T> result = new ArrayList<T>();
 			Field[] fields = entityClass.newInstance().getClass().getDeclaredFields();
-			StringBuilder str=new StringBuilder("SELECT ");
+			StringBuilder str = new StringBuilder("SELECT ");
 			for(Field field:fields){
 				str.append(field.getAnnotation(Stored.class).name()+", ");	
 			}
@@ -174,7 +172,7 @@ public class DBAccessor implements DBCRUDSInterface{
 			System.out.println(str);
 			resultSet = statement.executeQuery(str.toString());
 			while(resultSet.next()){
-				T instance=DAOAnnotationUtils.fromResultSet(resultSet, entityClass);
+				T instance = DAOAnnotationUtils.fromResultSet(resultSet, entityClass);
 				result.add(instance);
 			}
 			return result;	

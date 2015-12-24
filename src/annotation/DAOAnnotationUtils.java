@@ -16,7 +16,7 @@ import converter.IntegerConverter;
 import converter.StringConverter;
 
 /**
- * Класс с методами для работы с аннотированными полями
+ * РљР»Р°СЃСЃ СЃ РјРµС‚РѕРґР°РјРё РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ Р°РЅРЅРѕС‚РёСЂРѕРІР°РЅРЅС‹РјРё РїРѕР»СЏРјРё
  * @author Ivan
  */
 public class DAOAnnotationUtils {
@@ -24,9 +24,9 @@ public class DAOAnnotationUtils {
 	static FileInputStream stream;
 	
 	/**
-	 * Метод возвращает имя класса, в котором лежит переданное поле
-	 * @param c Поле
-	 * @return Имя класса
+	 * РњРµС‚РѕРґ РІРѕР·РІСЂР°С‰Р°РµС‚ РёРјСЏ РєР»Р°СЃСЃР°, РІ РєРѕС‚РѕСЂРѕРј Р»РµР¶РёС‚ РїРµСЂРµРґР°РЅРЅРѕРµ РїРѕР»Рµ
+	 * @param c РџРѕР»Рµ
+	 * @return РРјСЏ РєР»Р°СЃСЃР°
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static String getStorageName(Class c){
@@ -35,9 +35,9 @@ public class DAOAnnotationUtils {
 	}
 	
 	/**
-	 * Метод выбирает все поля с аннотацией Stored
-	 * @param c Класс из модели
-	 * @return Коллекция полей
+	 * РњРµС‚РѕРґ РІС‹Р±РёСЂР°РµС‚ РІСЃРµ РїРѕР»СЏ СЃ Р°РЅРЅРѕС‚Р°С†РёРµР№ Stored
+	 * @param c РљР»Р°СЃСЃ РёР· РјРѕРґРµР»Рё
+	 * @return РљРѕР»Р»РµРєС†РёСЏ РїРѕР»РµР№
 	 */
 	@SuppressWarnings("rawtypes")
 	public static HashMap<String, Field> getStoredFields(Class c){
@@ -53,10 +53,10 @@ public class DAOAnnotationUtils {
 	}
 	
 	/**
-	 *  Возвращает значение поля f из класса instance
-	 * @param instance Класс
-	 * @param f Поле 
-	 * @return Значение поля (Строка)
+	 *  Р’РѕР·РІСЂР°С‰Р°РµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕР»СЏ f РёР· РєР»Р°СЃСЃР° instance
+	 * @param instance РљР»Р°СЃСЃ
+	 * @param f РџРѕР»Рµ 
+	 * @return Р—РЅР°С‡РµРЅРёРµ РїРѕР»СЏ (РЎС‚СЂРѕРєР°)
 	 */
 	@SuppressWarnings("rawtypes")
 	public static <T> String getStringValue(T instance, Field f){
@@ -91,10 +91,10 @@ public class DAOAnnotationUtils {
 	}
 	
 	/**
-	 * Метод для доставания значения поля
-	 * @param instance Класс, в котором находится нужное поле
-	 * @param f Поле
-	 * @return Значение
+	 * РњРµС‚РѕРґ РґР»СЏ РґРѕСЃС‚Р°РІР°РЅРёСЏ Р·РЅР°С‡РµРЅРёСЏ РїРѕР»СЏ
+	 * @param instance РљР»Р°СЃСЃ, РІ РєРѕС‚РѕСЂРѕРј РЅР°С…РѕРґРёС‚СЃСЏ РЅСѓР¶РЅРѕРµ РїРѕР»Рµ
+	 * @param f РџРѕР»Рµ
+	 * @return Р—РЅР°С‡РµРЅРёРµ
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T getFieldValue(T instance, Field f){
@@ -116,9 +116,9 @@ public class DAOAnnotationUtils {
 	}
 	
 	/**
-	 * Возвращает конвертер переданного поля
-	 * @param field Поле
-	 * @return Класс конвертера
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕРЅРІРµСЂС‚РµСЂ РїРµСЂРµРґР°РЅРЅРѕРіРѕ РїРѕР»СЏ
+	 * @param field РџРѕР»Рµ
+	 * @return РљР»Р°СЃСЃ РєРѕРЅРІРµСЂС‚РµСЂР°
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static <T extends Converter> T getValueConverter(Field field){
@@ -136,10 +136,10 @@ public class DAOAnnotationUtils {
 	}
 	
 	/**
-	 * Метод обработки результата, возвращенного базой данных
-	 * @param rs Результат запроса к БД
-	 * @param entityClass Класс модели, в который будет сохранен результат
-	 * @return Обьект модели
+	 * РњРµС‚РѕРґ РѕР±СЂР°Р±РѕС‚РєРё СЂРµР·СѓР»СЊС‚Р°С‚Р°, РІРѕР·РІСЂР°С‰РµРЅРЅРѕРіРѕ Р±Р°Р·РѕР№ РґР°РЅРЅС‹С…
+	 * @param rs Р РµР·СѓР»СЊС‚Р°С‚ Р·Р°РїСЂРѕСЃР° Рє Р‘Р”
+	 * @param entityClass РљР»Р°СЃСЃ РјРѕРґРµР»Рё, РІ РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ СЃРѕС…СЂР°РЅРµРЅ СЂРµР·СѓР»СЊС‚Р°С‚
+	 * @return РћР±СЊРµРєС‚ РјРѕРґРµР»Рё
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T> T fromResultSet(ResultSet rs,Class entityClass){

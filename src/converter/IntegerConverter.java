@@ -1,6 +1,6 @@
 package converter;
 /**
- * Конвертер класса-обертки Integer
+ * РљРѕРЅРІРµСЂС‚РµСЂ РєР»Р°СЃСЃР°-РѕР±РµСЂС‚РєРё Integer
  * @author Ivan
  */
 public class IntegerConverter implements Converter {

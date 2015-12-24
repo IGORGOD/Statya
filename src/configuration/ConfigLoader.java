@@ -3,16 +3,16 @@ package configuration;
 import java.io.File;
 import java.io.IOException;
 /**
- * Класс для загрузки файла конфигурации
+ * РљР»Р°СЃСЃ РґР»СЏ Р·Р°РіСЂСѓР·РєРё С„Р°Р№Р»Р° РєРѕРЅС„РёРіСѓСЂР°С†РёРё
  * @author Ivan
  *
  */
 public class ConfigLoader {
 
 	/**
-	 * Метод загружает и парсит конфигурационный файл
-	 * @param obj файл конфигурации (.xml)
-	 * @return Обьект конфигурации
+	 * РњРµС‚РѕРґ Р·Р°РіСЂСѓР¶Р°РµС‚ Рё РїР°СЂСЃРёС‚ РєРѕРЅС„РёРіСѓСЂР°С†РёРѕРЅРЅС‹Р№ С„Р°Р№Р»
+	 * @param obj С„Р°Р№Р» РєРѕРЅС„РёРіСѓСЂР°С†РёРё (.xml)
+	 * @return РћР±СЊРµРєС‚ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
 	 */
 	public Configuration loadXMLConfig(Object obj){
 		

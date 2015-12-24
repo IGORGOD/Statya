@@ -10,7 +10,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 /**
- * Класс конфигурации для работы с свойствами
+ * РљР»Р°СЃСЃ РєРѕРЅС„РёРіСѓСЂР°С†РёРё РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ СЃРІРѕР№СЃС‚РІР°РјРё
  * @author Ivan
  *
  */
@@ -19,8 +19,8 @@ public class Configuration extends Properties{
 	private static final long serialVersionUID = -8592063196785809743L;
 
 	/**
-	 * Метод для принятия свойств из обьектов конфигураций
-	 * @param configurations обьекты конфигураций
+	 * РњРµС‚РѕРґ РґР»СЏ РїСЂРёРЅСЏС‚РёСЏ СЃРІРѕР№СЃС‚РІ РёР· РѕР±СЊРµРєС‚РѕРІ РєРѕРЅС„РёРіСѓСЂР°С†РёР№
+	 * @param configurations РѕР±СЊРµРєС‚С‹ РєРѕРЅС„РёРіСѓСЂР°С†РёР№
 	 */
 	public void appendConfiguration(Configuration... configurations) {
 		for(Configuration c : configurations){
@@ -48,8 +48,8 @@ public class Configuration extends Properties{
 	}
 	
 	/**
-	 * Метод для сохранения текущей конфигурации в xml-файл
-	 * @param path путь сохранения файла
+	 * РњРµС‚РѕРґ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ С‚РµРєСѓС‰РµР№ РєРѕРЅС„РёРіСѓСЂР°С†РёРё РІ xml-С„Р°Р№Р»
+	 * @param path РїСѓС‚СЊ СЃРѕС…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»Р°
 	 */
 	public void saveToXML(String path){
 		Element result = new Element("head");

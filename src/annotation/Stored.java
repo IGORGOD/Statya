@@ -9,14 +9,14 @@ import converter.StringConverter;
 public @interface Stored {
 	
 	/**
-	 * Имя аннотированного поля
+	 * РРјСЏ Р°РЅРЅРѕС‚РёСЂРѕРІР°РЅРЅРѕРіРѕ РїРѕР»СЏ
 	 * @return
 	 */
 	public String name() default "";
 	
 	/**
-	 * Тип конвертера аннотированного поля
-	 * @return Конвертер
+	 * РўРёРї РєРѕРЅРІРµСЂС‚РµСЂР° Р°РЅРЅРѕС‚РёСЂРѕРІР°РЅРЅРѕРіРѕ РїРѕР»СЏ
+	 * @return РљРѕРЅРІРµСЂС‚РµСЂ
 	 */
 	@SuppressWarnings("rawtypes")
 	public Class converter() default StringConverter.class;

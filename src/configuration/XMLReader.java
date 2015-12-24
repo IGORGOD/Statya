@@ -13,22 +13,22 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * Класс для разбора xml-файла в обьект конфигурации
+ * РљР»Р°СЃСЃ РґР»СЏ СЂР°Р·Р±РѕСЂР° xml-С„Р°Р№Р»Р° РІ РѕР±СЊРµРєС‚ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
  * @author Ivan
  *
  */
 public class XMLReader extends DefaultHandler {
 	
 	/**
-	 * Файл конфигурации
+	 * Р¤Р°Р№Р» РєРѕРЅС„РёРіСѓСЂР°С†РёРё
 	 */
 	private File source;
 	/**
-	 * Стек ключей свойств
+	 * РЎС‚РµРє РєР»СЋС‡РµР№ СЃРІРѕР№СЃС‚РІ
 	 */
 	private Stack<String> key = new Stack<String>();
 	/**
-	 * Обьект конфигурации
+	 * РћР±СЊРµРєС‚ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
 	 */
 	private Configuration configuration = new Configuration();
 
@@ -39,23 +39,23 @@ public class XMLReader extends DefaultHandler {
 
 	/**
 	 * 
-	 * @return исходный файл
+	 * @return РёСЃС…РѕРґРЅС‹Р№ С„Р°Р№Р»
 	 */
 	public File getSource() {
 		return source;
 	}
 
 	/**
-	 * Устанавливает файл конфигурации
-	 * @param source файл
+	 * РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С„Р°Р№Р» РєРѕРЅС„РёРіСѓСЂР°С†РёРё
+	 * @param source С„Р°Р№Р»
 	 */
 	public void setSource(File source) {
 		this.source = source;
 	}
 
 	/**
-	 * Метод разбора xml-файла конфигурации в готовый обьект конфигурации
-	 * @return конфигурация со свойствами
+	 * РњРµС‚РѕРґ СЂР°Р·Р±РѕСЂР° xml-С„Р°Р№Р»Р° РєРѕРЅС„РёРіСѓСЂР°С†РёРё РІ РіРѕС‚РѕРІС‹Р№ РѕР±СЊРµРєС‚ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
+	 * @return РєРѕРЅС„РёРіСѓСЂР°С†РёСЏ СЃРѕ СЃРІРѕР№СЃС‚РІР°РјРё
 	 * @throws IOException
 	 */
 	public Configuration parse() throws IOException {

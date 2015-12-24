@@ -8,7 +8,7 @@ import converter.StringConverter;
 
 @Stored(name = "tbl_data")
 public class Table {
-	
+
 	@Stored(name = "id_data", converter = IntegerConverter.class)
 	private int id_data;
 	
@@ -41,7 +41,8 @@ public class Table {
 			long millis = System.currentTimeMillis();
 			Calendar c = Calendar.getInstance();
 			c.setTimeInMillis(millis);
-			if (year.matches(String.format("^[2000-%s]$", c.get(Calendar.YEAR)))){
+			int buf = Integer.valueOf(year);
+			if (buf >= 2000 && buf <= c.get(1)){
 				this.year = year;
 			}
 			else{
@@ -53,7 +54,8 @@ public class Table {
 		}
 		// MONTH
 		if (month != null && !month.isEmpty()){
-			if (month.matches("^0[1-9]|[10-12]$")){
+			byte buf = Byte.valueOf(month);
+			if (buf >= 0 && buf <=11){
 				this.month = month;
 			}
 			else{
@@ -88,6 +90,70 @@ public class Table {
 		}
 		// NUMBER OF PASSENGERS
 		this.numOfPassengers = numOfPassengers;
+	}
+	
+	public void setId_data(int id_data) {
+		this.id_data = id_data;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
+	public void setDayOfWeek(byte dayOfWeek) {
+		this.dayOfWeek = dayOfWeek;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+	public void setLaunchPoint(String launchPoint) {
+		this.launchPoint = launchPoint;
+	}
+
+	public void setDestinationPoint(String destinationPoint) {
+		this.destinationPoint = destinationPoint;
+	}
+
+	public void setNumOfPassengers(int numOfPassengers) {
+		this.numOfPassengers = numOfPassengers;
+	}
+
+	public int getId_data() {
+		return id_data;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public String getMonth() {
+		return month;
+	}
+
+	public byte getDayOfWeek() {
+		return dayOfWeek;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public String getLaunchPoint() {
+		return launchPoint;
+	}
+
+	public String getDestinationPoint() {
+		return destinationPoint;
+	}
+
+	public int getNumOfPassengers() {
+		return numOfPassengers;
 	}
 	
 	@Override

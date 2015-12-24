@@ -42,7 +42,7 @@ public class DBAccessor implements DBCRUDSInterface{
 	public void open() {
 		try
         {
-			config = new ConfigLoader().loadXMLConfig(new File("Config_BD.xml"));
+			config = new ConfigLoader().loadXMLConfig(new File("src/BD.xml"));
             Class.forName("com.mysql.jdbc.Driver");
             connection= DriverManager.getConnection(config.getProperty("config.bd.url"),
                     config.getProperty("config.bd.user"), config.getProperty("config.bd.password"));

@@ -24,17 +24,14 @@ public class Table {
 	@Stored(name = "date_time", converter = StringConverter.class)
 	private String time;
 	
-	@Stored(name = "launchPoint", converter = StringConverter.class)
-	private String launchPoint;
-	
-	@Stored(name = "destinationPoint", converter = StringConverter.class)
-	private String destinationPoint;
+	@Stored(name = "id_route", converter = IntegerConverter.class)
+	private int idRoute;
 	
 	@Stored(name = "numOfPassengers", converter = IntegerConverter.class)
 	private int numOfPassengers;
 	
 	public Table(int id, String year, String month, byte dayOfWeek,
-			String time, String launchPoint, String destinationPoint, int numOfPassengers){
+			String time, int idRoute, int numOfPassengers){
 		id_data = id;
 		// YEAR
 		if (year != null && !year.isEmpty()){
@@ -74,20 +71,8 @@ public class Table {
 		}
 		// TIME
 		this.time = time;
-		// LAUNCH POINT
-		if (launchPoint != null && !launchPoint.isEmpty()){
-			this.launchPoint = launchPoint;
-		}
-		else{
-			throw new IllegalArgumentException("Launch point can't be null or empty");
-		}
-		// DESTINATION POINT
-		if (destinationPoint != null && !destinationPoint.isEmpty()){
-			this.destinationPoint = destinationPoint;
-		}
-		else{
-			throw new IllegalArgumentException("Destination point can't be null or empty");
-		}
+		// ID ROUTE
+		this.idRoute = idRoute;
 		// NUMBER OF PASSENGERS
 		this.numOfPassengers = numOfPassengers;
 	}
@@ -112,12 +97,8 @@ public class Table {
 		this.time = time;
 	}
 
-	public void setLaunchPoint(String launchPoint) {
-		this.launchPoint = launchPoint;
-	}
-
-	public void setDestinationPoint(String destinationPoint) {
-		this.destinationPoint = destinationPoint;
+	public void setIdRoute(int idRoute) {
+		this.idRoute = idRoute;
 	}
 
 	public void setNumOfPassengers(int numOfPassengers) {
@@ -144,12 +125,8 @@ public class Table {
 		return time;
 	}
 
-	public String getLaunchPoint() {
-		return launchPoint;
-	}
-
-	public String getDestinationPoint() {
-		return destinationPoint;
+	public int getIdRoute() {
+		return idRoute;
 	}
 
 	public int getNumOfPassengers() {
@@ -169,10 +146,8 @@ public class Table {
 		str.append(dayOfWeek);
 		str.append(" Time: ");
 		str.append(time);
-		str.append(" Launch point: ");
-		str.append(launchPoint);
-		str.append(" Destination point: ");
-		str.append(destinationPoint);
+		str.append(" idRoute: ");
+		str.append(idRoute);
 		str.append(" Number of passengers: ");
 		str.append(numOfPassengers);
 		return str.toString();

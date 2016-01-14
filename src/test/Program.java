@@ -63,8 +63,9 @@ public class Program {
 					int id = 1428;//0
 					while( (s = in.readLine()) != null && !s.isEmpty()){
 						String[] values = s.split("\t");
-						db.insert(new Table(id, values[0], values[1], Byte.valueOf(values[2]), values[3],
-								"Київ", "Чернігів", Integer.valueOf(values[4])));// swap Kiev and Chernigov
+// TEMPORARY NOT WORKING
+//						db.insert(new Table(id, values[0], values[1], Byte.valueOf(values[2]), values[3],
+//								"Київ", "Чернігів", Integer.valueOf(values[4])));// swap Kiev and Chernigov
 						id++;
 					}
 				} finally{

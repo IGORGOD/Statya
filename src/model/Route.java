@@ -1,6 +1,7 @@
 package model;
 
 import annotation.Stored;
+import converter.DoubleConverter;
 import converter.IntegerConverter;
 
 @Stored(name = "tbl_route")
@@ -15,14 +16,22 @@ public class Route {
 	@Stored(name = "id_city2", converter = IntegerConverter.class)
 	private int idCity2;
 	
-	@Stored(name = "id_route_consts", converter = IntegerConverter.class)
-	private int idRouteConstants;
+	@Stored(name = "r", converter = DoubleConverter.class)
+	private double r;
 	
-	public Route(int id, int idCity1, int idCity2, int idRouteConstants){
+	@Stored(name = "c", converter = DoubleConverter.class)
+	private double c;
+	
+	@Stored(name = "k", converter = DoubleConverter.class)
+	private double k;
+	
+	public Route(int id, int idCity1, int idCity2, double r, double c, double k){
 		idRoute = id;
 		this.idCity1 = idCity1;
 		this.idCity2 = idCity2;
-		this.idRouteConstants = idRouteConstants;
+		this.r = r;
+		this.c = c;
+		this.k = k;
 	}
 
 	public void setIdRoute(int idRoute) {
@@ -37,8 +46,16 @@ public class Route {
 		this.idCity2 = idCity2;
 	}
 
-	public void setIdRouteConstants(int idRouteConstants) {
-		this.idRouteConstants = idRouteConstants;
+	public void setR(double r) {
+		this.r = r;
+	}
+
+	public void setC(double c) {
+		this.c = c;
+	}
+
+	public void setK(double k) {
+		this.k = k;
 	}
 
 	public int getIdRoute() {
@@ -53,8 +70,16 @@ public class Route {
 		return idCity2;
 	}
 
-	public int getIdRouteConstants() {
-		return idRouteConstants;
+	public double getR() {
+		return r;
+	}
+
+	public double getC() {
+		return c;
+	}
+
+	public double getK() {
+		return k;
 	}
 	
 	@Override
@@ -66,8 +91,12 @@ public class Route {
 		str.append(idCity1);
 		str.append(" idCity2: ");
 		str.append(idCity2);
-		str.append(" idRouteConstants: ");
-		str.append(idRouteConstants);
+		str.append(" r: ");
+		str.append(r);
+		str.append(" c: ");
+		str.append(c);
+		str.append(" k: ");
+		str.append(k);
 		return str.toString();
 	}
 

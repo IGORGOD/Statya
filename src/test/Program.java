@@ -6,7 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import model.Bus;
+import model.City;
+import model.Route;
 import model.Table;
 import ua.ii.db.DBAccessor;
 
@@ -44,7 +48,24 @@ public class Program {
 		return null;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+		DBAccessor db = new DBAccessor();
+		db.open();
+		
+//		db.insert(new City("New York", 6660));
+//		db.insert(new City("Malie podzalupniki", 9990));
+//		db.insert(new Route(3, 4, 0.5, 0.6, 0.7));
+//		db.insert(new Table( "2016", "4", (byte)2, "07-08",
+//				2, 55));
+		List<City> cities = db.readAll(City.class);
+		for (City city : cities) {
+			System.out.println(city);
+		}
+		
+		db.close();
+	}
+	
+	public static void main_old(String[] args) {
 		DBAccessor db = new DBAccessor();
 		db.open();
 		File file = new File("src/KCH.txt");// CHK

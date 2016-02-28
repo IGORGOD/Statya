@@ -22,7 +22,7 @@ public class Ft {
 	
 	/**
 	 * 
-	 * @param T тип время прогноза
+	 * @param T С‚РёРї РІСЂРµРјСЏ РїСЂРѕРіРЅРѕР·Р°
 	 * @return
 	 */
 	private double calcG(double T) {

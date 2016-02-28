@@ -1,6 +1,8 @@
 package model;
 
 import java.util.Calendar;
+
+import annotation.AutoincrementPK;
 import annotation.Stored;
 import converter.ByteConverter;
 import converter.IntegerConverter;
@@ -8,9 +10,9 @@ import converter.StringConverter;
 
 @Stored(name = "tbl_data")
 public class Table {
-
-	@Stored(name = "id_data", converter = IntegerConverter.class)
-	private int id_data;
+	
+	@AutoincrementPK(name = "id_data", converter = IntegerConverter.class)
+	private int idTable;
 	
 	@Stored(name = "date_year", converter = StringConverter.class)
 	private String year;
@@ -30,9 +32,8 @@ public class Table {
 	@Stored(name = "numOfPassengers", converter = IntegerConverter.class)
 	private int numOfPassengers;
 	
-	public Table(int id, String year, String month, byte dayOfWeek,
+	public Table(String year, String month, byte dayOfWeek,
 			String time, int idRoute, int numOfPassengers){
-		id_data = id;
 		// YEAR
 		if (year != null && !year.isEmpty()){
 			long millis = System.currentTimeMillis();
@@ -77,8 +78,16 @@ public class Table {
 		this.numOfPassengers = numOfPassengers;
 	}
 	
-	public void setId_data(int id_data) {
-		this.id_data = id_data;
+	public Table(){}
+	
+	public Table(int id, String year, String month, byte dayOfWeek,
+			String time, int idRoute, int numOfPassengers){
+		this(year, month, dayOfWeek, time, idRoute, numOfPassengers);
+		this.idTable = id;
+	}
+
+	public void setIdTable(int idTable) {
+		this.idTable = idTable;
 	}
 
 	public void setYear(String year) {
@@ -105,8 +114,8 @@ public class Table {
 		this.numOfPassengers = numOfPassengers;
 	}
 
-	public int getId_data() {
-		return id_data;
+	public int getIdTable() {
+		return idTable;
 	}
 
 	public String getYear() {
@@ -136,8 +145,10 @@ public class Table {
 	@Override
 	public String toString(){
 		StringBuilder str = new StringBuilder();
-		str.append("idData: ");
-		str.append(id_data);
+		if (idTable != 0){
+			str.append(" idTable:");
+			str.append(idTable);
+		}
 		str.append(" Year: ");
 		str.append(year);
 		str.append(" Month: ");

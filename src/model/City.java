@@ -1,5 +1,6 @@
 package model;
 
+import annotation.AutoincrementPK;
 import annotation.Stored;
 import converter.IntegerConverter;
 import converter.StringConverter;
@@ -7,7 +8,7 @@ import converter.StringConverter;
 @Stored(name = "tbl_city")
 public class City {
 	
-	@Stored(name = "id_city", converter = IntegerConverter.class)
+	@AutoincrementPK(name = "id_city", converter = IntegerConverter.class)
 	private int idCity;
 	
 	@Stored(name = "city_name", converter = StringConverter.class)
@@ -16,8 +17,9 @@ public class City {
 	@Stored(name = "city_area", converter = IntegerConverter.class)
 	private int area;
 
-	public City(int id, String name, int area){
-		idCity = id;
+	public City(){}
+	
+	public City(String name, int area){
 		// NAME
 		if (name != null && !name.isEmpty()){
 			this.name = name;
@@ -32,6 +34,11 @@ public class City {
 		else{
 			throw new IllegalArgumentException("Area can't be negative");
 		}
+	}
+	
+	public City(int id, String name, int area){
+		this(name, area);
+		this.idCity = id;
 	}
 
 	public void setIdCity(int idCity) {
@@ -61,13 +68,14 @@ public class City {
 	@Override
 	public String toString(){
 		StringBuilder str = new StringBuilder();
-		str.append("idCity: ");
-		str.append(idCity);
+		if (idCity != 0){
+			str.append(" idCity:");
+			str.append(idCity);
+		}
 		str.append(" Name: ");
 		str.append(name);
 		str.append(" Area: ");
 		str.append(area);
 		return str.toString();
 	}
-	
 }

@@ -1,5 +1,6 @@
 package model;
 
+import annotation.AutoincrementPK;
 import annotation.Stored;
 import converter.DoubleConverter;
 import converter.IntegerConverter;
@@ -7,7 +8,7 @@ import converter.IntegerConverter;
 @Stored(name = "tbl_route")
 public class Route {
 	
-	@Stored(name = "id_route", converter = IntegerConverter.class)
+	@AutoincrementPK(name = "id_route", converter = IntegerConverter.class)
 	private int idRoute;
 	
 	@Stored(name = "id_city1", converter = IntegerConverter.class)
@@ -25,13 +26,19 @@ public class Route {
 	@Stored(name = "k", converter = DoubleConverter.class)
 	private double k;
 	
-	public Route(int id, int idCity1, int idCity2, double r, double c, double k){
-		idRoute = id;
+	public Route(){}
+	
+	public Route(int idCity1, int idCity2, double r, double c, double k){
 		this.idCity1 = idCity1;
 		this.idCity2 = idCity2;
 		this.r = r;
 		this.c = c;
 		this.k = k;
+	}
+	
+	public Route(int id, int idCity1, int idCity2, double r, double c, double k){
+		this(idCity1, idCity2, r, c, k);
+		this.idRoute = id;
 	}
 
 	public void setIdRoute(int idRoute) {
@@ -85,8 +92,10 @@ public class Route {
 	@Override
 	public String toString(){
 		StringBuilder str = new StringBuilder();
-		str.append("idRoute: ");
-		str.append(idRoute);
+		if (idRoute != 0){
+			str.append(" idRoute:");
+			str.append(idRoute);
+		}
 		str.append(" idCity1: ");
 		str.append(idCity1);
 		str.append(" idCity2: ");

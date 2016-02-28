@@ -9,9 +9,11 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.UUID;
 
+import annotation.AutoincrementPK;
 import annotation.Stored;
 import converter.ByteConverter;
 import converter.Converter;
+import converter.DoubleConverter;
 import converter.IntegerConverter;
 import converter.StringConverter;
 
@@ -142,23 +144,40 @@ public class DAOAnnotationUtils {
 	 * @return Обьект модели
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static <T> T fromResultSet(ResultSet rs,Class entityClass){
+	public static <T> T fromResultSet(ResultSet rs, Class entityClass){
 		try{
 			T instance = (T)entityClass.newInstance();
 			Field[] fields = entityClass.getDeclaredFields();
 			for(Field field:fields){
 				PropertyDescriptor p = new PropertyDescriptor(field.getName(), entityClass);
-				if(field.getAnnotation(Stored.class).converter().equals(IntegerConverter.class)){
-					int i = rs.getInt(field.getAnnotation(Stored.class).name());
-					p.getWriteMethod().invoke(instance, i);		
+				if (field.isAnnotationPresent(Stored.class)){
+					if(field.getAnnotation(Stored.class).converter().equals(IntegerConverter.class)){
+						int i = rs.getInt(field.getAnnotation(Stored.class).name());
+						p.getWriteMethod().invoke(instance, i);	
+						continue;
+					}
+					if(field.getAnnotation(Stored.class).converter().equals(ByteConverter.class)){
+						byte i = rs.getByte(field.getAnnotation(Stored.class).name());
+						p.getWriteMethod().invoke(instance, i);	
+						continue;
+					}
+					if(field.getAnnotation(Stored.class).converter().equals(StringConverter.class)){
+						String i = rs.getString(field.getAnnotation(Stored.class).name());
+						p.getWriteMethod().invoke(instance, i);
+						continue;
+					}
+					if(field.getAnnotation(Stored.class).converter().equals(DoubleConverter.class)){
+						double i = rs.getDouble(field.getAnnotation(Stored.class).name());
+						p.getWriteMethod().invoke(instance, i);	
+						continue;
+					}
 				}
-				if(field.getAnnotation(Stored.class).converter().equals(ByteConverter.class)){
-					byte i = rs.getByte(field.getAnnotation(Stored.class).name());
-					p.getWriteMethod().invoke(instance, i);		
-				}
-				if(field.getAnnotation(Stored.class).converter().equals(StringConverter.class)){
-					String i = rs.getString(field.getAnnotation(Stored.class).name());
-					p.getWriteMethod().invoke(instance, i);
+				if (field.isAnnotationPresent(AutoincrementPK.class)){
+					if(field.getAnnotation(AutoincrementPK.class).converter().equals(IntegerConverter.class)){
+						int i = rs.getInt(field.getAnnotation(AutoincrementPK.class).name());
+						p.getWriteMethod().invoke(instance, i);		
+						continue;
+					}
 				}
 			}
 			return instance;

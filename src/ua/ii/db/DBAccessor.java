@@ -11,10 +11,12 @@ import java.util.List;
 
 import com.mysql.jdbc.Statement;
 
+import annotation.AutoincrementPK;
 import annotation.DAOAnnotationUtils;
 import annotation.Stored;
 import configuration.ConfigLoader;
 import configuration.Configuration;
+import model.City;
 
 public class DBAccessor implements DBCRUDSInterface {
 
@@ -69,11 +71,10 @@ public class DBAccessor implements DBCRUDSInterface {
 			Field[] fields = instance.getClass().getDeclaredFields();
 			str.append("(");
 			for (Field field : fields) {
-				if (!field.getAnnotation(Stored.class).name().equals("id")) {
+				if (field.isAnnotationPresent(Stored.class)){
 					str.append(field.getAnnotation(Stored.class).name() + ", ");
 					str1.append("\"" + DAOAnnotationUtils.getFieldValue(instance, field) + "\", ");
 				}
-
 			}
 			str1 = new StringBuilder(str1.substring(0, str1.length() - 2));
 			str1.append(")");
@@ -93,15 +94,22 @@ public class DBAccessor implements DBCRUDSInterface {
 			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE ");
 			sql.append(DAOAnnotationUtils.getStorageName(instance.getClass()) + " SET ");
+			Field idField = null;
 			for (Field field : fields) {
-				sql.append(field.getAnnotation(Stored.class).name());
-				sql.append("=\"" + DAOAnnotationUtils.getFieldValue(instance, field) + "\", ");
+				if (field.isAnnotationPresent(Stored.class)){
+					sql.append(field.getAnnotation(Stored.class).name());
+					sql.append("=\"" + DAOAnnotationUtils.getFieldValue(instance, field) + "\", ");
+					continue;
+				}
+				if (field.isAnnotationPresent(AutoincrementPK.class)){
+					idField = field;
+				}
 			}
 			sql = new StringBuilder(sql.substring(0, sql.length() - 2));
-			sql.append(" WHERE id");
-			sql.append(DAOAnnotationUtils.getStorageName(instance.getClass()));
-			sql.append("=");
-			sql.append(DAOAnnotationUtils.getFieldValue(instance, fields[0]));
+			sql.append(" WHERE ");
+			sql.append(idField.getAnnotation(AutoincrementPK.class).name());
+			sql.append(" = ");
+			sql.append(DAOAnnotationUtils.getFieldValue(instance, idField));
 			System.out.println(sql.toString());
 			statement.execute(sql.toString());
 		} catch (Exception e) {
@@ -113,7 +121,6 @@ public class DBAccessor implements DBCRUDSInterface {
 		try {
 			resultSet = statement.executeQuery(SQLString);
 			ArrayList<T> result = new ArrayList<T>();
-
 			while (resultSet.next()) {
 				T instance = DAOAnnotationUtils.fromResultSet(resultSet, entityClass);
 				result.add(instance);
@@ -131,7 +138,12 @@ public class DBAccessor implements DBCRUDSInterface {
 			Field[] fields = entityClass.newInstance().getClass().getDeclaredFields();
 			StringBuilder str = new StringBuilder("SELECT ");
 			for (Field field : fields) {
-				str.append(field.getAnnotation(Stored.class).name() + ", ");
+				if (field.isAnnotationPresent(AutoincrementPK.class)){
+					str.append(field.getAnnotation(AutoincrementPK.class).name() + ", ");
+				}
+				if (field.isAnnotationPresent(Stored.class)){
+					str.append(field.getAnnotation(Stored.class).name() + ", ");
+				}
 			}
 			str = new StringBuilder(str.substring(0, str.length() - 2));
 			str.append(" FROM ");
@@ -154,7 +166,12 @@ public class DBAccessor implements DBCRUDSInterface {
 			Field[] fields = entityClass.newInstance().getClass().getDeclaredFields();
 			StringBuilder str = new StringBuilder("SELECT ");
 			for (Field field : fields) {
-				str.append(field.getAnnotation(Stored.class).name() + ", ");
+				if (field.isAnnotationPresent(AutoincrementPK.class)){
+					str.append(field.getAnnotation(AutoincrementPK.class).name() + ", ");
+				}
+				if (field.isAnnotationPresent(Stored.class)){
+					str.append(field.getAnnotation(Stored.class).name() + ", ");
+				}
 			}
 			str = new StringBuilder(str.substring(0, str.length() - 2));
 			str.append(" FROM ");
@@ -166,42 +183,6 @@ public class DBAccessor implements DBCRUDSInterface {
 				result.add(instance);
 			}
 			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public <T> T read(Class<T> entityClass, int id) {
-		try {
-			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT ");
-			sql.append(" * FROM ");
-			sql.append(DAOAnnotationUtils.getStorageName(entityClass));
-			sql.append(" WHERE id");
-			sql.append(entityClass.getSimpleName());
-			sql.append(" = ");
-			sql.append(id);
-			System.out.println(sql);
-			ResultSet rs = statement.executeQuery(sql.toString());
-			rs.last();
-			return DAOAnnotationUtils.fromResultSet(rs, entityClass);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public <T> T read(Class<T> entityClass, String text) {
-		try {
-			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM");
-			sql.append(DAOAnnotationUtils.getStorageName(entityClass));
-			sql.append(" WHERE text = ");
-			sql.append(entityClass.getDeclaredField("Text"));
-			System.out.println(sql);
-			ResultSet rs = statement.executeQuery(sql.toString());
-			return DAOAnnotationUtils.fromResultSet(rs, entityClass);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

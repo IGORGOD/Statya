@@ -10,8 +10,8 @@ import converter.StringConverter;
 @Stored(name = "tbl_consts_city")
 public class ConstantsCity {
 
-	@Stored(name = "id_consts_city", converter = IntegerConverter.class)
-	private int idConstantsCity;
+	@Stored(name = "id_city", converter = IntegerConverter.class)
+	private int idCity;
 	
 	@Stored(name = "date_year", converter = StringConverter.class)
 	private String year;
@@ -19,8 +19,10 @@ public class ConstantsCity {
 	@Stored(name = "density", converter = DoubleConverter.class)
 	private double density;
 	
+	public ConstantsCity(){}
+	
 	public ConstantsCity(int id, String year, double density){
-		idConstantsCity = id;
+		idCity = id;
 		// YEAR
 		if (year != null && !year.isEmpty()){
 			long millis = System.currentTimeMillis();
@@ -46,8 +48,8 @@ public class ConstantsCity {
 		}
 	}
 
-	public void setIdConstantsCity(int idConstantsCity) {
-		this.idConstantsCity = idConstantsCity;
+	public void setIdCity(int idCity) {
+		this.idCity = idCity;
 	}
 
 	public void setYear(String year) {
@@ -58,8 +60,8 @@ public class ConstantsCity {
 		this.density = density;
 	}
 
-	public int getIdConstantsCity() {
-		return idConstantsCity;
+	public int getIdCity() {
+		return idCity;
 	}
 
 	public String getYear() {
@@ -73,8 +75,8 @@ public class ConstantsCity {
 	@Override
 	public String toString(){
 		StringBuilder str = new StringBuilder();
-		str.append("idConstantsCity: ");
-		str.append(idConstantsCity);
+		str.append("idcity: ");
+		str.append(idCity);
 		str.append(" Year: ");
 		str.append(year);
 		str.append(" Density: ");

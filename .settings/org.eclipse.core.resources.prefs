@@ -1,6 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/annotation/DAOAnnotationUtils.java=UTF-8
 encoding//src/annotation/Stored.java=UTF-8
+encoding//src/businesslogic/Ft.java=UTF-8
 encoding//src/configuration/ConfigLoader.java=UTF-8
 encoding//src/configuration/Configuration.java=UTF-8
 encoding//src/configuration/XMLReader.java=UTF-8
@@ -10,8 +11,8 @@ encoding//src/converter/DoubleConverter.java=UTF-8
 encoding//src/converter/IntegerConverter.java=UTF-8
 encoding//src/converter/StringConverter.java=UTF-8
 encoding//src/model/Bus.java=UTF-8
-encoding//src/model/BusPark.java=UTF-8
 encoding//src/model/Table.java=UTF-8
 encoding//src/test/Program.java=UTF-8
 encoding//src/ua/ii/db/DBAccessor.java=UTF-8
 encoding//src/ua/ii/db/DBCRUDSInterface.java=UTF-8
+encoding/<project>=UTF-8

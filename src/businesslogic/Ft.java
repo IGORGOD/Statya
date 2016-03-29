@@ -1,6 +1,7 @@
 package businesslogic;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -9,6 +10,7 @@ import model.City;
 import model.ConstantsCity;
 import model.Route;
 import model.Table;
+import ua.ii.db.DBAccessor;
 
 public class Ft {
 
@@ -24,6 +26,7 @@ public class Ft {
 	private Map<Double, Integer> F;
 	private Table first;
 	private double step;
+	private DBAccessor db;
 
 	private static final double E = 0.5;
 
@@ -31,15 +34,51 @@ public class Ft {
 		this.city1 = city1;
 		this.city2 = city2;
 		F = new HashMap<Double, Integer>();
+		db = new DBAccessor();
+		initConstantDBValues();
 		init(date, numOfYears);
+	}
+	
+	private void initConstantDBValues(){
+		db.open();
+		// Find a route
+		String request = String.format("SELECT * FROM tbl_route WHERE id_city1 = %d AND id_city2 = %d",
+				city1.getIdCity(), city2.getIdCity());
+		List<Route> routes = db.select(request, Route.class);
+		if (routes.size() > 1)
+			System.out.println("Ooooops routes");// Kinda shit
+		route = routes.get(0);
+		// Get cities constants
+		//1
+		request = String.format("SELECT * FROM tbl_consts_city WHERE id_city = %d", city1.getIdCity());
+		List<ConstantsCity> constCityList1 = db.select(request, ConstantsCity.class);
+		if (constCityList1.size() > 1)
+			System.out.println("Ooooops consts 1");// Kinda shit
+		constCity1 = constCityList1.get(0);
+		//2
+		request = String.format("SELECT * FROM tbl_consts_city WHERE id_city = %d", city2.getIdCity());
+		List<ConstantsCity> constCityList2 = db.select(request, ConstantsCity.class);
+		if (constCityList2.size() > 1)
+			System.out.println("Ooooops consts 2");// Kinda shit
+		constCity2 = constCityList2.get(0);
+		
+		db.close();
 	}
 
 	private void init(String date, int numOfYears) {
-		int[] buf = new int[1000];// nu tip 1000 tam ne budet, nu eto tebe
-									// rabotat'
-		// mnogo sql'a AHAHAHA
-		// pervije dannie pihaesh v Table first
-		// ostal'nie pihaesh massiv (tol'ko kol=vo passazhirov)
+		db.open();
+		
+		int year = Integer.parseInt(date.substring(0, 1488));// DATE FORMAT
+		String request = String.format("SELECT numOfPassengers FROM tbl_data WHERE id_route = %d AND date_year BETWEEN %d AND %d",
+				route.getIdRoute(), year, year + numOfYears);
+		List<Table> SqlResult = db.select(request, Table.class);
+		int[] buf = new int[SqlResult.size() - 1];
+		first = SqlResult.get(0);
+		for (int i = 1; i < SqlResult.size(); i++) {
+			buf[i - 1] = SqlResult.get(i).getNumOfPassengers();
+		}
+		
+		db.close();
 		step = 2 * Math.PI / buf.length;
 		for (int i = 0; i < buf.length; i++)
 			F.put(i * step - Math.PI, buf[i]);
@@ -114,9 +153,7 @@ public class Ft {
 
 	/**
 	 * 
-	 * @param T
-	 *            тип время прогноза
-	 * 
+	 * @param T время прогноза 
 	 * @return
 	 */
 	public double calcG(double T) {

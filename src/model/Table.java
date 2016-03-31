@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import annotation.AutoincrementPK;
 import annotation.Stored;
-import converter.ByteConverter;
 import converter.IntegerConverter;
 import converter.StringConverter;
 
@@ -14,14 +13,8 @@ public class Table {
 	@AutoincrementPK(name = "id_data", converter = IntegerConverter.class)
 	private int idTable;
 	
-	@Stored(name = "date_year", converter = StringConverter.class)
-	private String year;
-	
-	@Stored(name = "date_month", converter = StringConverter.class)
-	private String month;
-	
-	@Stored(name = "date_dw", converter = ByteConverter.class)
-	private byte dayOfWeek;
+	@Stored(name = "date", converter = StringConverter.class) //yyyy-mm-dd
+	private String date;
 	
 	@Stored(name = "date_time", converter = StringConverter.class)
 	private String time;
@@ -32,16 +25,30 @@ public class Table {
 	@Stored(name = "numOfPassengers", converter = IntegerConverter.class)
 	private int numOfPassengers;
 	
-	public Table(String year, String month, byte dayOfWeek,
-			String time, int idRoute, int numOfPassengers){
+	public Table(String date, String time, int idRoute, int numOfPassengers){
 		// YEAR
-		if (year != null && !year.isEmpty()){
+		if (date != null && !date.isEmpty()){
+			String [] dateNums = date.split("-");
 			long millis = System.currentTimeMillis();
 			Calendar c = Calendar.getInstance();
 			c.setTimeInMillis(millis);
-			int buf = Integer.valueOf(year);
+			int buf = Integer.valueOf(dateNums[0]);
 			if (buf >= 2000 && buf <= c.get(1)){
-				this.year = year;
+				// MONTH
+				byte buf2 = Byte.valueOf(dateNums[1]);
+				if (buf >= 0 && buf2 <=11){
+					// DAY OF MONTH
+					byte dayOfWeek = Byte.valueOf(dateNums[2]);
+					if (dayOfWeek >= 0 && dayOfWeek < 32){
+						this.date = date;
+					}
+					else{
+						throw new IllegalArgumentException("Day of week out of range [1..31]");
+					}
+				}
+				else{
+					throw new IllegalArgumentException("Month out of range [01 - 12]");
+				}
 			}
 			else{
 				throw new IllegalArgumentException("Year out of range [2000 - now]");
@@ -49,26 +56,6 @@ public class Table {
 		}
 		else{
 			throw new IllegalArgumentException("Year can't be null or empty");
-		}
-		// MONTH
-		if (month != null && !month.isEmpty()){
-			byte buf = Byte.valueOf(month);
-			if (buf >= 0 && buf <=11){
-				this.month = month;
-			}
-			else{
-				throw new IllegalArgumentException("Month out of range [01 - 12]");
-			}
-		}
-		else{
-			throw new IllegalArgumentException("Month can't be null or empty");
-		}
-		// DAY OF WEEK
-		if (dayOfWeek >= 0 && dayOfWeek < 7){
-			this.dayOfWeek = dayOfWeek;
-		}
-		else{
-			throw new IllegalArgumentException("Day of week out of range [0..6]");
 		}
 		// TIME
 		this.time = time;
@@ -80,9 +67,8 @@ public class Table {
 	
 	public Table(){}
 	
-	public Table(int id, String year, String month, byte dayOfWeek,
-			String time, int idRoute, int numOfPassengers){
-		this(year, month, dayOfWeek, time, idRoute, numOfPassengers);
+	public Table(int id, String date, String time, int idRoute, int numOfPassengers){
+		this(date, time, idRoute, numOfPassengers);
 		this.idTable = id;
 	}
 
@@ -90,16 +76,8 @@ public class Table {
 		this.idTable = idTable;
 	}
 
-	public void setYear(String year) {
-		this.year = year;
-	}
-
-	public void setMonth(String month) {
-		this.month = month;
-	}
-
-	public void setDayOfWeek(byte dayOfWeek) {
-		this.dayOfWeek = dayOfWeek;
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 	public void setTime(String time) {
@@ -118,16 +96,8 @@ public class Table {
 		return idTable;
 	}
 
-	public String getYear() {
-		return year;
-	}
-
-	public String getMonth() {
-		return month;
-	}
-
-	public byte getDayOfWeek() {
-		return dayOfWeek;
+	public String getDate() {
+		return date;
 	}
 
 	public String getTime() {
@@ -149,12 +119,8 @@ public class Table {
 			str.append(" idTable:");
 			str.append(idTable);
 		}
-		str.append(" Year: ");
-		str.append(year);
-		str.append(" Month: ");
-		str.append(month);
-		str.append(" Day of week: ");
-		str.append(dayOfWeek);
+		str.append(" Date: ");
+		str.append(date);
 		str.append(" Time: ");
 		str.append(time);
 		str.append(" idRoute: ");

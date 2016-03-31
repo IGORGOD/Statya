@@ -6,10 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import businesslogic.Ft;
 import model.Bus;
 import model.City;
+import model.ConstantsCity;
 import model.Route;
 import model.Table;
 import ua.ii.db.DBAccessor;
@@ -48,27 +51,27 @@ public class Program {
 		return null;
 	}
 
-	public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+	public static void main_asd(String[] args) throws InstantiationException, IllegalAccessException {
 		DBAccessor db = new DBAccessor();
 		db.open();
 		
-//		db.insert(new City("New York", 6660));
-//		db.insert(new City("Malie podzalupniki", 9990));
-//		db.insert(new Route(3, 4, 0.5, 0.6, 0.7));
-//		db.insert(new Table( "2016", "4", (byte)2, "07-08",
-//				2, 55));
-		List<City> cities = db.readAll(City.class);
-		for (City city : cities) {
-			System.out.println(city);
-		}
+		db.insert(new ConstantsCity(1, "2011", 1000));
+		db.insert(new ConstantsCity(1, "2012", 1500));
+		db.insert(new ConstantsCity(2, "2011", 750));
+		db.insert(new ConstantsCity(2, "2012", 500));
+//		db.insert(new City("Kiev", 1));
+//		db.insert(new City("Chernigov", 1));
+//		db.insert(new Route(1, 2, 0.5, 0.6, 0.7));
+		
+		
 		
 		db.close();
 	}
 	
-	public static void main_old(String[] args) {
+	public static void main_db(String[] args) {
 		DBAccessor db = new DBAccessor();
 		db.open();
-		File file = new File("src/KCH.txt");// CHK
+		File file = new File("src/KCH2.txt");// CHK
 		
 		if (!file.exists()){
 			try {
@@ -81,13 +84,12 @@ public class Program {
 				BufferedReader in = new BufferedReader(new FileReader(file.getAbsolutePath()));
 				try{
 					String s;
-					int id = 1428;//0
 					while( (s = in.readLine()) != null && !s.isEmpty()){
 						String[] values = s.split("\t");
 // TEMPORARY NOT WORKING
-//						db.insert(new Table(id, values[0], values[1], Byte.valueOf(values[2]), values[3],
-//								"Київ", "Чернігів", Integer.valueOf(values[4])));// swap Kiev and Chernigov
-						id++;
+						String [] dateNums = values[0].split("\\.");
+						String newDate = String.format("%s-%s-%s", dateNums[2], dateNums[1], dateNums[0]);
+						db.insert(new Table(newDate, values[1], 1, Integer.valueOf(values[2])));// swap Kiev and Chernigov
 					}
 				} finally{
 					in.close();
@@ -100,4 +102,12 @@ public class Program {
 		db.close();
 	}
 
+	public static void main(String[] args) {
+		DBAccessor db = new DBAccessor();
+		db.open();
+		List<City> cities = db.select(City.class);
+		db.close();
+		Ft f = new Ft(cities.get(0), cities.get(1), "2011-05-01", 1);
+		System.out.println(f.calcG(0.5));
+	}
 }

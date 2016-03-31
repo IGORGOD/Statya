@@ -13,7 +13,7 @@ public class ConstantsCity {
 	@Stored(name = "id_city", converter = IntegerConverter.class)
 	private int idCity;
 	
-	@Stored(name = "date_year", converter = StringConverter.class)
+	@Stored(name = "year", converter = StringConverter.class)
 	private String year;
 	
 	@Stored(name = "density", converter = DoubleConverter.class)

@@ -28,21 +28,21 @@ public class Ft {
 	private double step;
 	private DBAccessor db;
 
-	private static final double E = 0.5;
+	private static final double E = 0.01;
 
 	public Ft(City city1, City city2, String date, int numOfYears) {
 		this.city1 = city1;
 		this.city2 = city2;
 		F = new HashMap<Double, Integer>();
 		db = new DBAccessor();
-		initConstantDBValues();
+		initConstantDBValues(date);
 		init(date, numOfYears);
 	}
 	
-	private void initConstantDBValues(){
+	private void initConstantDBValues(String date){
 		db.open();
 		// Find a route
-		String request = String.format("SELECT * FROM tbl_route WHERE id_city1 = %d AND id_city2 = %d",
+		String request = String.format("SELECT * FROM tbl_route WHERE id_city1 = %d AND id_city2 = %d" ,
 				city1.getIdCity(), city2.getIdCity());
 		List<Route> routes = db.select(request, Route.class);
 		if (routes.size() > 1)
@@ -50,13 +50,13 @@ public class Ft {
 		route = routes.get(0);
 		// Get cities constants
 		//1
-		request = String.format("SELECT * FROM tbl_consts_city WHERE id_city = %d", city1.getIdCity());
+		request = String.format("SELECT * FROM tbl_consts_city WHERE id_city = %d  AND year = %s", city1.getIdCity(), date.substring(0, 4));
 		List<ConstantsCity> constCityList1 = db.select(request, ConstantsCity.class);
 		if (constCityList1.size() > 1)
 			System.out.println("Ooooops consts 1");// Kinda shit
 		constCity1 = constCityList1.get(0);
 		//2
-		request = String.format("SELECT * FROM tbl_consts_city WHERE id_city = %d", city2.getIdCity());
+		request = String.format("SELECT * FROM tbl_consts_city WHERE id_city = %d  AND year = %s", city2.getIdCity(), date.substring(0, 4));
 		List<ConstantsCity> constCityList2 = db.select(request, ConstantsCity.class);
 		if (constCityList2.size() > 1)
 			System.out.println("Ooooops consts 2");// Kinda shit
@@ -68,8 +68,8 @@ public class Ft {
 	private void init(String date, int numOfYears) {
 		db.open();
 		
-		int year = Integer.parseInt(date.substring(0, 1488));// DATE FORMAT
-		String request = String.format("SELECT numOfPassengers FROM tbl_data WHERE id_route = %d AND date_year BETWEEN %d AND %d",
+		int year = Integer.parseInt(date.substring(0, 4));// DATE FORMAT yyyy-mm-dd
+		String request = String.format("SELECT * FROM tbl_data WHERE id_route = %d AND year(date) BETWEEN %d AND %d",
 				route.getIdRoute(), year, year + numOfYears);
 		List<Table> SqlResult = db.select(request, Table.class);
 		int[] buf = new int[SqlResult.size() - 1];

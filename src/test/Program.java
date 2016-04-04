@@ -7,7 +7,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Random;
 
 import businesslogic.Ft;
 import model.Bus;
@@ -16,6 +19,7 @@ import model.ConstantsCity;
 import model.Route;
 import model.Table;
 import ua.ii.db.DBAccessor;
+import ua.iih.graphics.Graphic;
 
 // BE CAREFUL, MAKE BACKUPS
 public class Program {
@@ -102,12 +106,30 @@ public class Program {
 		db.close();
 	}
 
-	public static void main(String[] args) {
+	public static void main_Sel(String[] args) {
 		DBAccessor db = new DBAccessor();
 		db.open();
 		List<City> cities = db.select(City.class);
 		db.close();
 		Ft f = new Ft(cities.get(0), cities.get(1), "2011-05-01", 1);
 		System.out.println(f.calcG(0.5));
+	}
+	
+	public static void main(String[] args) {
+		Random r = new Random();
+		double [] y = new double[15];
+		for (int i = 0; i < y.length; i++) {
+			y[i] = 30 + r.nextDouble()*50;
+		}
+		String [] X = new String[15];
+		Calendar cal = new GregorianCalendar();
+		cal.set(2011, 1, 1);
+		for (int i = 0; i < X.length; i++) {
+			X[i] = String.format("%d.%d.%d", cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
+			cal.add(cal.get(3), 1);
+		}
+		X[14] = "15.1.2011"; //костыль
+		
+		Graphic.paint(y, X);
 	}
 }

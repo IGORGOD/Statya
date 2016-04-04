@@ -27,6 +27,7 @@ public class Ft {
 	private Table first;
 	private double step;
 	private DBAccessor db;
+	private boolean consts = false;
 
 	private static final double E = 0.01;
 
@@ -38,37 +39,40 @@ public class Ft {
 		initConstantDBValues(date);
 		init(date, numOfYears);
 	}
-	
-	private void initConstantDBValues(String date){
+
+	private void initConstantDBValues(String date) {
 		db.open();
 		// Find a route
-		String request = String.format("SELECT * FROM tbl_route WHERE id_city1 = %d AND id_city2 = %d" ,
+		String request = String.format("SELECT * FROM tbl_route WHERE id_city1 = %d AND id_city2 = %d",
 				city1.getIdCity(), city2.getIdCity());
 		List<Route> routes = db.select(request, Route.class);
 		if (routes.size() > 1)
 			System.out.println("Ooooops routes");// Kinda shit
 		route = routes.get(0);
 		// Get cities constants
-		//1
-		request = String.format("SELECT * FROM tbl_consts_city WHERE id_city = %d  AND year = %s", city1.getIdCity(), date.substring(0, 4));
+		// 1
+		request = String.format("SELECT * FROM tbl_consts_city WHERE id_city = %d  AND year = %s", city1.getIdCity(),
+				date.substring(0, 4));
 		List<ConstantsCity> constCityList1 = db.select(request, ConstantsCity.class);
 		if (constCityList1.size() > 1)
 			System.out.println("Ooooops consts 1");// Kinda shit
 		constCity1 = constCityList1.get(0);
-		//2
-		request = String.format("SELECT * FROM tbl_consts_city WHERE id_city = %d  AND year = %s", city2.getIdCity(), date.substring(0, 4));
+		// 2
+		request = String.format("SELECT * FROM tbl_consts_city WHERE id_city = %d  AND year = %s", city2.getIdCity(),
+				date.substring(0, 4));
 		List<ConstantsCity> constCityList2 = db.select(request, ConstantsCity.class);
 		if (constCityList2.size() > 1)
 			System.out.println("Ooooops consts 2");// Kinda shit
 		constCity2 = constCityList2.get(0);
-		
+
 		db.close();
 	}
 
 	private void init(String date, int numOfYears) {
 		db.open();
-		
-		int year = Integer.parseInt(date.substring(0, 4));// DATE FORMAT yyyy-mm-dd
+
+		int year = Integer.parseInt(date.substring(0, 4));// DATE FORMAT
+															// yyyy-mm-dd
 		String request = String.format("SELECT * FROM tbl_data WHERE id_route = %d AND year(date) BETWEEN %d AND %d",
 				route.getIdRoute(), year, year + numOfYears);
 		List<Table> SqlResult = db.select(request, Table.class);
@@ -77,7 +81,7 @@ public class Ft {
 		for (int i = 1; i < SqlResult.size(); i++) {
 			buf[i - 1] = SqlResult.get(i).getNumOfPassengers();
 		}
-		
+
 		db.close();
 		step = 2 * Math.PI / buf.length;
 		for (int i = 0; i < buf.length; i++)
@@ -85,14 +89,21 @@ public class Ft {
 	}
 
 	private double getF(double t) {
-		calcConsts();
-		do {
-			n++;
-			a = new double[n];
-			b = new double[n];
+		if (!consts) {
 			calcConsts();
-		} while (!check());
-		return 0.0;
+			do {
+				n++;
+				a = new double[n];
+				b = new double[n];
+				calcConsts();
+			} while (!check());
+			consts = true;
+		}
+		double buf = 0.0;
+		for (int i = 0; i < n; i++) {
+			// buf +=
+		}
+		return buf;
 	}
 
 	private void calcConsts() {
@@ -153,7 +164,8 @@ public class Ft {
 
 	/**
 	 * 
-	 * @param T время прогноза 
+	 * @param T
+	 *            время прогноза
 	 * @return
 	 */
 	public double calcG(double T) {
